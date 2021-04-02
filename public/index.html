@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>GPX Parser</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CHANGE ME">
+    <meta name="keywords" content="CHANGE ME">
+    <meta name="author" content="CHANGE ME">
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+
+<body>
+    <h1>ULTIMATE GPX PARSER</h1>
+    <hr>
+
+    <!-- <form ref='uploadForm' id='uploadForm' action='/upload' method='post' encType="multipart/form-data">
+        <div class="form-group">
+            <input type="file" name="uploadFile" class="btn btn-secondary">
+            <input type='submit' value='Upload' class="btn btn-secondary">
+        </div>
+    </form> -->
+
+    <form ref='uploadForm' id='uploadForm' method='post'>
+        <div class="form-group">
+            <input type="file" id="uploadFile" class="btn btn-secondary">
+            <input type='submit' value='Upload' class="btn btn-secondary">
+        </div>
+    </form>
+
+    <h2>File Log Panel</h2>
+
+    <table id='filetable' style="width:100%">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Version</th>
+                <th>Creator</th>
+                <th>Waypoints</th>
+                <th>Routes</th>
+                <th>Tracks</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <hr>
+    <h2>GPX View Panel</h2>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            GPX Files
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"></div>
+    </div>
+    <br>
+    <div class="selectedfile">
+        <h5>selected file: none selected</h5>
+    </div>
+    <br>
+
+    <table id="viewtable" style="width:100%">
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Name</th>
+                <th>Number of points</th>
+                <th>Length</th>
+                <th>Loop</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <hr>
+
+    <h2>View Components</h2>
+
+    <table id="componenttable" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h3>Change Route Name</h3>
+
+    <form ref='routenameform' id='routenameform'>
+        <div class="form-group">
+            <label for="entryBox">No Component Selected</label>
+            <input type="text" class="form-control" id="entryBox" placeholder="Route Name">
+        </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Change Name">
+        </div>
+    </form>
+
+    <hr>
+    <h3>Add Route</h3>
+    <h5>Add a route to the chosen GPX file from the dropdown menu.</h5>
+
+    <form ref='getroutedetailsform' id='getroutedetailsform'>
+        <div class="form-group">
+
+            <label for="nameBox">Route Name</label>
+            <input type="text" class="form-control" id="nameBox" placeholder="Route Name">
+            <br>
+
+            <label for="waypointLatBox">Waypoint Latitude</label>
+            <input type="text" class="form-control" id="waypointLatBox" placeholder="Waypoint Longitude">
+            <br>
+
+            <label for="waypointLonBox">Waypoint Longitude</label>
+            <input type="text" class="form-control" id="waypointLonBox" placeholder="Waypoint Latitude">
+
+            <br>
+
+            <input type='submit' class="btn btn-secondary" value="Add Waypoint">
+
+            <br>
+            <br>
+            <table id="waypointtable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br>   
+        </div>
+    </form>
+
+    <form ref='addrouteform' id='addrouteform'>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Create Route">
+        </div>
+    </form>
+
+    <hr>
+    <h3>Create GPX</h3>
+    <h5>Create a GPX file with your parameters.</h5>
+
+    <form ref='creategpxform' id='creategpxform'>
+        <div class="form-group">
+            <label for="fileNameBox">File Name</label>
+            <input type="text" class="form-control" id="fileNameBox" placeholder="File Name">
+            <br>
+            <label for="versionBox">Version</label>
+            <input type="text" class="form-control" id="versionBox" placeholder="Version">
+            <br>
+            <label for="creatorBox">Creator</label>
+            <input type="text" class="form-control" id="creatorBox" placeholder="Creator">
+            <br>
+        </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Generate File">
+        </div>
+    </form>
+    <hr>
+    
+    <h3>Find Paths Between</h3>
+    <h5>Find all routes and tracks between a given two points.</h5>
+
+    <form ref='findpathform' id='findpathform'>
+        <div class="form-group">
+            <label for="lat1Box">Point 1 Latitude</label>
+            <input type="text" class="form-control" id="lat1Box" placeholder="Latitude for Point 1">
+            <br>
+            <label for="lon1Box">Point 1 Longitude</label>
+            <input type="text" class="form-control" id="lon1Box" placeholder="Longitude for Point 1">
+            <br>
+            <label for="lat2Box">Point 2 Latitude</label>
+            <input type="text" class="form-control" id="lat2Box" placeholder="Latitude for Point 2">
+            <br>
+            <label for="lon2Box">Point 2 Longitude</label>
+            <input type="text" class="form-control" id="lon2Box" placeholder="Longitude for Point 2">
+            <br>
+            <label for="deltaBox">Delta Value</label>
+            <input type="text" class="form-control" id="deltaBox" placeholder="Delta Box">
+            <br>
+        </div>
+        <div class="form-group">
+            <input type='submit' class="btn btn-secondary" value="Calculate Paths">
+        </div>
+    </form>
+
+    <br>
+
+    <table id="pathstable" style="width:100%">
+        <thead>
+            <tr>
+                <th>Component</th>
+                <th>Name</th>
+                <th>Number of points</th>
+                <th>Length</th>
+                <th>Loop</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+    <br>
+
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+
+</html>

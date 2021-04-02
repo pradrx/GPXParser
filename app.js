@@ -90,13 +90,6 @@ app.post('/upload', async function (req, res) {
         return res.status(400).json({message: "File already exists!"});
     }
 
-    var pathName = './uploads/' + uploadFile.name;
-    var num = await isValid(pathName);
-    console.log(num);
-    if (num === 0) {
-        return res.status(400).json({message: "Invalid GPX File!"});
-    }
-
     // Use the mv() method to place the file somewhere on your server
     uploadFile.mv('uploads/' + uploadFile.name, function (err) {
         if (err) {

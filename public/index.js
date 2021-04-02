@@ -75,7 +75,7 @@ jQuery(document).ready(async function () {
             success: function () {
                 location.reload();
             },
-            error: ({responseJSON: {message}}) => {
+            error: ({ responseJSON: { message } }) => {
                 alert(message);
             }
         });
@@ -167,7 +167,7 @@ jQuery(document).ready(async function () {
         var temp = fileString.split(" ");
         var fileName = temp[temp.length - 1];
         if (text[0] === 'No') {
-            alert("No component selected!"); i
+            alert("No component selected!");
         } else {
             var pathName = './uploads/' + temp[temp.length - 1];
 
@@ -391,59 +391,55 @@ jQuery(document).ready(async function () {
         } else if (delta < 0) {
             alert("Invalid delta value!");
         } else {
-            latitude = parseFloat(latitude).toFixed(6);
-            longitude = parseFloat(longitude).toFixed(6);
-            $('#waypointtable tbody').append('<tr><td>' + latitude + '</td><td>' + longitude + '</td><tr>');
+
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                url: '/findPath',
+                data: {
+                    lat1: lat1,
+                    lon1: lon1,
+                    lat2: lat2,
+                    lon2: lon2,
+                    delta: delta
+                },
+                success: function (data) {
+                    $('#pathstable tbody').empty();
+
+                    var routeCounter = 1;
+                    var trackCounter = 1;
+
+                    // for (var i = 0; i < data.routeList.length; i++) {
+                    //     var string = '<tr><td>' + 'Route ' + (i + 1) + '</td><td>' + data.routeList[i].name + '</td><td>' + data.routeList[i].numPoints + '</td><td>' + data.routeList[i].len + '</td><td>' + data.routeList[i].loop + '</td></tr>';
+                    //     $('#pathstable tbody').append(string);
+                    // }
+
+                    // for (var i = 0; i < data.trackList.length; i++) {
+                    //     var string = '<tr><td>' + 'Track ' + (i + 1) + '</td><td>' + data.trackList[i].name + '</td><td>' + data.trackList[i].numPoints + '</td><td>' + data.trackList[i].len + '</td><td>' + data.trackList[i].loop + '</td></tr>';
+                    //     $('#pathstable tbody').append(string);
+                    // }
+
+                    for (var i = 0; i < data.routeList.length; i++) {
+                        for (var j = 0; j < data.routeList[i].length; j++) {
+                            var string = '<tr><td>' + 'Route ' + routeCounter + '</td><td>' + data.routeList[i][j].name + '</td><td>' + data.routeList[i][j].numPoints + '</td><td>' + data.routeList[i][j].len + '</td><td>' + data.routeList[i][j].loop + '</td></tr>';
+                            $('#pathstable tbody').append(string);
+                            routeCounter++;
+                        }
+                    }
+
+                    for (var i = 0; i < data.trackList.length; i++) {
+                        for (var j = 0; j < data.trackList[i].length; j++) {
+                            var string = '<tr><td>' + 'Track ' + trackCounter + '</td><td>' + data.trackList[i][j].name + '</td><td>' + data.trackList[i][j].numPoints + '</td><td>' + data.trackList[i][j].len + '</td><td>' + data.trackList[i][j].loop + '</td></tr>';
+                            $('#pathstable tbody').append(string);
+                            trackCounter++;
+                        }
+                    }
+                },
+                fail: function (error) {
+                    console.log(error);
+                }
+            });
         }
-
-        $.ajax({
-            type: 'get',
-            dataType: 'json',
-            url: '/findPath',
-            data: {
-                lat1: lat1,
-                lon1: lon1,
-                lat2: lat2,
-                lon2: lon2,
-                delta: delta
-            },
-            success: function (data) {
-                $('#pathstable tbody').empty();
-
-                var routeCounter = 1;
-                var trackCounter = 1;
-
-                // for (var i = 0; i < data.routeList.length; i++) {
-                //     var string = '<tr><td>' + 'Route ' + (i + 1) + '</td><td>' + data.routeList[i].name + '</td><td>' + data.routeList[i].numPoints + '</td><td>' + data.routeList[i].len + '</td><td>' + data.routeList[i].loop + '</td></tr>';
-                //     $('#pathstable tbody').append(string);
-                // }
-
-                // for (var i = 0; i < data.trackList.length; i++) {
-                //     var string = '<tr><td>' + 'Track ' + (i + 1) + '</td><td>' + data.trackList[i].name + '</td><td>' + data.trackList[i].numPoints + '</td><td>' + data.trackList[i].len + '</td><td>' + data.trackList[i].loop + '</td></tr>';
-                //     $('#pathstable tbody').append(string);
-                // }
-
-                for (var i = 0; i < data.routeList.length; i++) {
-                    for (var j = 0; j < data.routeList[i].length; j++) {
-                        var string = '<tr><td>' + 'Route ' + routeCounter + '</td><td>' + data.routeList[i][j].name + '</td><td>' + data.routeList[i][j].numPoints + '</td><td>' + data.routeList[i][j].len + '</td><td>' + data.routeList[i][j].loop + '</td></tr>';
-                        $('#pathstable tbody').append(string);
-                        routeCounter++;
-                    }
-                }
-
-                for (var i = 0; i < data.trackList.length; i++) {
-                    for (var j = 0; j < data.trackList[i].length; j++) {
-                        var string = '<tr><td>' + 'Track ' + trackCounter + '</td><td>' + data.trackList[i][j].name + '</td><td>' + data.trackList[i][j].numPoints + '</td><td>' + data.trackList[i][j].len + '</td><td>' + data.trackList[i][j].loop + '</td></tr>';
-                        $('#pathstable tbody').append(string);
-                        trackCounter++;
-                    }
-                }
-            },
-            fail: function (error) {
-                console.log(error);
-            }
-        });
-
     });
 
 
